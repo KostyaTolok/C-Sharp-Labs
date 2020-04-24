@@ -206,7 +206,7 @@ namespace Task1
         static void Main(string[] args)
         {
             ConsoleKey choice;
-            List<Student> people;
+            List<Student> students;
             while (true)
             {
                 Console.WriteLine("Do you want to use preset?(Y/N)");
@@ -217,10 +217,10 @@ namespace Task1
                         Student Kostya = new Programmer("Kostya", 18, "male", 175, 70, 1, 5);
                         Student Lena = new Medic("Lena", 19, "female", 160, 50, 4, 3);
                         Student Katya = new Linguist("Katya", 20, "female", 165, 65, 5, 1);
-                        people = new List<Student> { Kostya, Lena, Katya };
+                        students = new List<Student> { Kostya, Lena, Katya };
                         break;
                     case ConsoleKey.N:
-                        people = new List<Student>();
+                        students = new List<Student>();
                         InputObject(people);
                         break;
                     default:
@@ -237,16 +237,16 @@ namespace Task1
                 switch (choice)
                 {
                     case ConsoleKey.D1:
-                        people.Sort();
+                        students.Sort();
                         break;
                     case ConsoleKey.D2:
-                        people.Sort(new StudentCourseComparer());
+                        students.Sort(new StudentCourseComparer());
                         break;
                     case ConsoleKey.D3:
-                        people.Sort(new StudentGroupComparer());
+                        students.Sort(new StudentGroupComparer());
                         break;
                     case ConsoleKey.D4:
-                        people.Sort(new StudentBodyMassIndexComparer());
+                        students.Sort(new StudentBodyMassIndexComparer());
                         break;
                     default:
                         Console.Clear();
@@ -256,46 +256,42 @@ namespace Task1
                 break;
             }
             Console.WriteLine("\nAmount of students " + people.Count);
-            foreach (Person person in people)
+            foreach (Student student in students)
             {
-                if (person is Student)
+                if (student is Programmer)
                 {
-                    Student student = person as Student;
-                    if (student is Programmer)
+                    Console.WriteLine("\nProgrammer:");
+                }
+                else if (student is Medic)
+                {
+                    Console.WriteLine("\nMedic:");
+                }
+                else
+                {
+                    Console.WriteLine("\nLinguist:");
+                }
+                Console.WriteLine(student);
+                DefineAge(student.Age);
+                DefineBodyMasIndex(student.BodyMassIndex);
+                if (student is IScholarship scholarship)
+                {
+                    Console.WriteLine(student.Name + "'s scholarship is " + scholarship.GetScholarship());
+                }
+                if (student is IMilitaryDepartment department)
+                {
+                    if (department.DetermineSuitability())
                     {
-                        Console.WriteLine("\nProgrammer:");
-                    }
-                    else if (student is Medic)
-                    {
-                        Console.WriteLine("\nMedic:");
+                        Console.WriteLine("Suitable for military department");
                     }
                     else
                     {
-                        Console.WriteLine("\nLinguist:");
+                        Console.WriteLine("Not suitable for military department");
                     }
-                    Console.WriteLine(student);
-                    DefineAge(student.Age);
-                    DefineBodyMasIndex(student.BodyMassIndex);
-                    if (student is IScholarship scholarship)
-                    {
-                        Console.WriteLine(student.Name + "'s scholarship is " + scholarship.GetScholarship());
-                    }
-                    if (student is IMilitaryDepartment department)
-                    {
-                        if (department.DetermineSuitability())
-                        {
-                            Console.WriteLine("Suitable for military department");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Not suitable for military department");
-                        }
-                    }
-                    Console.WriteLine("\nScedule: \n");
-                    for (DaysOfWeek day = 0; day != DaysOfWeek.Sunday; day++)
-                    {
-                        Console.WriteLine(Convert.ToString(day) + ":\n" + student.GetSubjects(day));
-                    }
+                }
+                Console.WriteLine("\nScedule: \n");
+                for (DaysOfWeek day = 0; day != DaysOfWeek.Sunday; day++)
+                {
+                    Console.WriteLine(Convert.ToString(day) + ":\n" + student.GetSubjects(day));
                 }
             }
         }
